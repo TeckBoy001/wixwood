@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Status | WixWood Crafts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAFAFA;
+      --card-bg: #FFFFFF;
+      --text: #1C1917;
+      --muted: #78716C;
+      --accent: #C5A880;
+      --accent-dark: #9A7B4F;
+      --border: #E7E5E4;
+      --success: #15803D;
+      --pending: #B45309;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+      text-align: center;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .status-badge.pending {
+      background-color: #FEF3C7;
+      color: var(--pending);
+    }
+    .status-badge.paid {
+      background-color: #DCFCE7;
+      color: var(--success);
+    }
+    .status-badge.cancelled {
+      background-color: #FEE2E2;
+      color: #B91C1C;
+    }
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+    p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .order-details {
+      background-color: var(--bg);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.75rem;
+      text-align: left;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.35rem 0;
+      font-size: 0.875rem;
+    }
+    .detail-label { color: var(--muted); }
+    .detail-value { font-weight: 600; color: var(--text); }
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 0.875rem 1.5rem;
+      background-color: var(--text);
+      color: #FFFFFF;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+    .btn:hover {
+      background-color: #333;
+    }
+    .support-note {
+      margin-top: 1.5rem;
+      font-size: 0.825rem;
+      color: var(--muted);
+    }
+    .support-note a {
+      color: var(--accent-dark);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="/" class="logo">WixWood Crafts</a>
+  </div>
+
+  <div class="card" id="cardContainer">
+    <div id="statusBadge" class="status-badge pending">
+      <div class="spinner" id="spinner"></div>
+      <span id="badgeText">Checking Payment Status...</span>
+    </div>
+
+    <h1 id="titleHeading">Verifying Your Order</h1>
+    <p id="statusDescription">Please wait while we confirm your payment with Paystack. This page updates automatically.</p>
+
+    <div class="order-details" id="orderDetails" style="display: none;">
+      <div class="detail-row">
+        <span class="detail-label">Order Reference</span>
+        <span class="detail-value" id="orderId">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Payment Status</span>
+        <span class="detail-value" id="payStatus">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Order Status</span>
+        <span class="detail-value" id="orderStatus">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Total Amount</span>
+        <span class="detail-value" id="orderTotal">-</span>
+      </div>
+    </div>
+
+    <a href="/" class="btn">Return to Showroom</a>
+
+    <div class="support-note">
+      Need assistance with your order? Contact us on <a href="https://wa.me/23481003844552" target="_blank">WhatsApp (081003844552)</a> or email <a href="mailto:wixwood@gmail.com">wixwood@gmail.com</a>.
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const reference = params.get('trxref') || params.get('reference') || params.get('order');
+
+      const badge = document.getElementById('statusBadge');
+      const badgeText = document.getElementById('badgeText');
+      const spinner = document.getElementById('spinner');
+      const heading = document.getElementById('titleHeading');
+      const desc = document.getElementById('statusDescription');
+      const details = document.getElementById('orderDetails');
+      const orderIdEl = document.getElementById('orderId');
+      const payStatusEl = document.getElementById('payStatus');
+      const orderStatusEl = document.getElementById('orderStatus');
+      const orderTotalEl = document.getElementById('orderTotal');
+
+      if (!reference) {
+        badge.className = 'status-badge cancelled';
+        spinner.style.display = 'none';
+        badgeText.textContent = 'No Order Reference Found';
+        heading.textContent = 'Order Not Found';
+        desc.textContent = 'No order reference was specified. Please check your order details or contact support.';
+        return;
+      }
+
+      // Extract order ID if reference is in format WW-XXXX-123456
+      let orderId = reference;
+      if (reference.includes('-')) {
+        const parts = reference.split('-');
+        if (parts.length >= 2) {
+          orderId = parts[0] + '-' + parts[1];
+        }
+      }
+
+      orderIdEl.textContent = orderId;
+
+      async function checkStatus() {
+        try {
+          const res = await fetch('/api/orders/' + encodeURIComponent(orderId) + '/status');
+          if (!res.ok) {
+            throw new Error('Order not found');
+          }
+          const data = await res.json();
+
+          details.style.display = 'block';
+          orderIdEl.textContent = data.id || orderId;
+          payStatusEl.textContent = (data.payment_status || '').toUpperCase();
+          orderStatusEl.textContent = (data.order_status || '').toUpperCase();
+          orderTotalEl.textContent = (data.currency || 'NGN') + ' ' + Number(data.total || 0).toLocaleString();
+
+          if (data.payment_status === 'paid') {
+            badge.className = 'status-badge paid';
+            spinner.style.display = 'none';
+            badgeText.textContent = 'Payment Confirmed';
+            heading.textContent = 'Thank You for Your Order!';
+            desc.textContent = 'Your payment has been successfully verified. WixWood Crafts is now preparing your handcrafted item.';
+            return true; // Stop polling
+          } else if (data.order_status === 'cancelled') {
+            badge.className = 'status-badge cancelled';
+            spinner.style.display = 'none';
+            badgeText.textContent = 'Order Cancelled';
+            heading.textContent = 'Order Status: Cancelled';
+            desc.textContent = 'This order was marked as cancelled. Please contact us on WhatsApp if you have questions.';
+            return true; // Stop polling
+          } else {
+            badge.className = 'status-badge pending';
+            spinner.style.display = 'inline-block';
+            badgeText.textContent = 'Payment Pending Confirmation';
+            heading.textContent = 'Payment Confirmation in Progress';
+            desc.textContent = 'We are waiting for Paystack webhook confirmation. This page will update automatically as soon as payment is confirmed.';
+            return false; // Keep polling
+          }
+        } catch (err) {
+          badge.className = 'status-badge pending';
+          badgeText.textContent = 'Polling Status...';
+          return false;
+        }
+      }
+
+      // Initial check
+      checkStatus().then(isFinal => {
+        if (!isFinal) {
+          const interval = setInterval(async () => {
+            const finished = await checkStatus();
+            if (finished) clearInterval(interval);
+          }, 3000);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

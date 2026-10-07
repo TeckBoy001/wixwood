@@ -1,0 +1,9 @@
+You are continuing an existing project, not starting a new one.
+
+Open this folder and read ANTIGRAVITY_INSTRUCTIONS.md in full before doing anything. It lists what exists, the exact commands to run, the API contract, the acceptance tests, the hard rules, and the build backlog.
+
+Your first milestone: get 01_laravel_app running (composer install, migrate, serve), then write automated tests that reproduce the acceptance tests in section 6, and fix whatever breaks. The Laravel code has never been executed, so treat it as unverified.
+
+Do not rebuild the front-end from scratch. Do not invent prices, contact details, reviews, or any business facts; leave visible placeholders and list what you need from the owner. Totals are computed server-side only, and an order is marked paid only after a verified Paystack webhook plus a server-side Verify call.
+
+When finished, report: what you ran, what passed, what you changed, and what is still blocked on the owner.

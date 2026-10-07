@@ -1,0 +1,17 @@
+{
+  "_comment": "Server-side source of truth for prices. The website never sends a price to this server — only a product id and quantity — so this file (or env override) is the ONLY place an order total can come from. Fill in a number (Naira, no commas) to make a product orderable online. Leave null and it stays request-a-quote-only, same as it is on the site today. Only 'fixed' priceType items can ever be sold through checkout; 'quote' items are intentionally excluded below and will be rejected by the API if sent.",
+  "currency": "NGN",
+  "products": {
+    "hardwood-stool":   { "name": "Hardwood Stool",                      "price": null },
+    "handled-cup":      { "name": "Handled Hardwood Cup",                "price": null },
+    "serving-bowl":     { "name": "Hardwood Serving Bowl",                "price": null },
+    "serving-board":    { "name": "Hardwood Serving & Cutting Board",     "price": null }
+  },
+  "deliveryZones": {
+    "_comment": "id -> {name, fee}. Fee in Naira. Must match the zone ids the site's checkout form sends.",
+    "lagos-mainland": { "name": "Lagos Mainland", "fee": null },
+    "lagos-island":   { "name": "Lagos Island",    "fee": null },
+    "abuja":          { "name": "Abuja",           "fee": null },
+    "pickup":         { "name": "Workshop pickup", "fee": 0 }
+  }
+}
